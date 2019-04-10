@@ -1,0 +1,33 @@
+
+<h1>Podanie žiadosti o pracovné voľno</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'new' %}" method="post">
+    {% csrf_token %}
+    <label>Typ voľna</label>
+    <select>
+        <option value="PN">PN</option>
+        <option value="ICR">IČR</option>
+        <option value="holiday">Dovolenka</option>
+        <option value="sickday">Sickday</option>
+    </select>
+
+    <label>Trvanie</label>
+    <label>od</label>
+    <input type="date" name="begin_date">
+    <label>do</label>
+    <input type="date" name="end_date">
+
+    <label>Spôsob upozornenia</label>
+    <select>
+        <option value="sms">SMS</option>
+        <option value="email">email</option>
+    </select>
+
+    <label>Kommentár:</label>
+    <textarea rows="4" cols="50" name="comment">Vložte kommentár...</textarea>
+
+    <input type="submit" value="Registrate">
+</form>
+
