@@ -1,0 +1,13 @@
+<h1>Registration</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'registrate' %}" method="post">
+    {% csrf_token %}
+    <label>Name</label>
+    <input type="text" name="name">
+
+    <label>Email</label>
+    <input type="email" name="email">
+    <input type="submit" value="Registrate">
+</form>
