@@ -6,7 +6,7 @@
 <form action="{% url 'new' %}" method="post">
     {% csrf_token %}
     <label>Typ voľna</label>
-    <select>
+    <select name="type">
         <option value="PN">PN</option>
         <option value="ICR">IČR</option>
         <option value="holiday">Dovolenka</option>

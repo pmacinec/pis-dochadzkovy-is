@@ -10,11 +10,13 @@ def index(request):
 
 
 def create(request):
-    return render(request, 'applications/new.html')
+    return render(request, 'applications/create.html')
 
 
 def new(request):
-    print(request.POST['name'])
-    print(request.POST['email'])
+    print("bbbb")
+    print(request.POST['type'])
+    print(request.POST['begin_date'])
+    print(request.POST['end_date'])
 
     return True
