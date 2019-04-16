@@ -1,0 +1,19 @@
+<h1>Dokončenie registrácie - doplnenie údajov</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'update_employee' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="employee_id" value="{{employee_id}}">
+
+    <label>Tel. číslo</label>
+    <input type="tel" name="phone">
+
+    <label>Heslo</label>
+    <input type="password" name="password">
+
+    <label>Heslo znovu</label>
+    <input type="password" name="password_repeat">
+
+    <input type="submit" value="Save">
+</form>
