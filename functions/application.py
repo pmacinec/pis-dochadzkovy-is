@@ -1,5 +1,6 @@
 from zeep import Client
 from zeep.xsd import SkipValue
+from functions import employee as e
 
 def create(application_type=None, begin_date=None, end_date=None, notification_type=None, comment=None, employee_id = None, file = None):
     """Function to create new application using web service."""
@@ -35,11 +36,44 @@ def get(application_id=None):
 def get_user_applications(user_id=None):
     """Function to get all user applications from web service."""
 
-    if user_id is None: return
+    if user_id is None: return 
         
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
 
     return client.service.getByAttributeValue('employee_id', str(user_id), (0,1))
+
+def get_approvals(id=None):
+
+    if id is None: return
+
+    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071approval?WSDL') 
+
+    return client.service.getByAttributeValue('application_id', str(id), (0,1))
+
+def translate_state(state):
+
+    if(2 == state):
+        return 'zamietnuté'
+    elif(0 == state):
+        return 'riešené'
+    else:
+        return 'schválené' 
+
+
+def get_managers(id=None):
+
+    if id is None: return
+
+    approvals = get_approvals(id)
+
+    managers = []
+    for approval in approvals:
+        manager = e.get(approval.manager_id)
+        manager.state = translate_state(approval.state)
+        managers.append(manager)
+
+    return managers
+
 
 
 # def update(employee_id, password=None, phone=None):

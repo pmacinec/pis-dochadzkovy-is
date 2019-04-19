@@ -1,0 +1,29 @@
+<h1>Žiadosť č. {{ application.id }} </h1>
+
+<p>Meno: <strong>{{ employee.name }}</strong> </p>
+<p>Dátum od <strong>{{application.begin_date}}</strong> do <strong>{{application.end_date}}</strong></p>
+<p>Typ:  <strong>{{ application.type }}</strong> </p>
+<p>Komentár:  <strong>{{ application.comment }}</strong> </p>
+
+<div>
+	{% if managers %}	
+		<table>
+			<tr>
+				<th>Schvaľovateľ</th>
+				<th>Stav</th> 
+				<th>Komentár</th>
+			</tr>
+			{% for manager in managers %}
+				<tr>
+					<td>{{ manager.name }}</td> 
+					<td>{{ manager.state }}</td>
+					<td></td>
+				</tr>
+		    {% endfor %}
+		</table>	
+	{% else %}
+	    <p>Žiadní schvaľovatelia</p>
+	{% endif %}
+	
+</div>
+

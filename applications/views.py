@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from zeep import Client
 from functions import application as a
+from functions import employee as e
 
 def index(request):
 
@@ -22,5 +23,12 @@ def new(request):
     print(request.POST['end_date'])
 
     return True
+
+def show(request,id):
+    application = a.get(id)
+    employee = e.get(application.employee_id)
+    managers = a.get_managers(application.id)
+
+    return render(request, 'applications/show.html', {'application':application, 'employee':employee, 'managers':managers })
 
 
