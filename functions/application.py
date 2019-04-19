@@ -33,6 +33,24 @@ def get(application_id=None):
 
     return client.service.getById(int(application_id))
 
+def get_state(id=None):
+
+    if id is None: return
+
+    approvals = get_approvals(id)
+
+    if not approvals:
+        return ''
+
+    status = [approval.state for approval in approvals]
+
+    if(2 in status):
+        return 'zamietnuté'
+    elif(0 in status):
+        return 'riešené'
+    else:
+        return 'schválené' 
+
 def get_user_applications(user_id=None):
     """Function to get all user applications from web service."""
 
@@ -40,7 +58,11 @@ def get_user_applications(user_id=None):
         
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
 
-    return client.service.getByAttributeValue('employee_id', str(user_id), (0,1))
+    applications = client.service.getByAttributeValue('employee_id', str(user_id), (0,1))
+    for application in applications:
+        application.state = get_state(application.id)
+
+    return applications
 
 def get_approvals(id=None):
 
@@ -73,6 +95,7 @@ def get_managers(id=None):
         managers.append(manager)
 
     return managers
+
 
 
 
