@@ -1,0 +1,14 @@
+<h1>Registrácia nového zamestnanca</h1>
+
+{% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
+
+<form action="{% url 'registrate' %}" method="post">
+    {% csrf_token %}
+    <label>Meno</label>
+    <input type="text" name="name">
+
+    <label>Email</label>
+    <input type="email" name="email">
+
+    <input type="submit" value="Registrovať">
+</form>
