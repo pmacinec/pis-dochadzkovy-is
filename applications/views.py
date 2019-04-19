@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from zeep import Client
+from functions import application as a
 
 def index(request):
 
     # WS get applications of logged in user
+    applications = a.get_user_applications(190506)
 
-    return render(request, 'applications/index.html')
+    return render(request, 'applications/index.html', {'applications': applications})
 
 
 def create(request):
@@ -20,3 +22,5 @@ def new(request):
     print(request.POST['end_date'])
 
     return True
+
+

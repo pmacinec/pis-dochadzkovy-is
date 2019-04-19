@@ -1,1 +1,29 @@
-<h1>All applications</h1>
+<div>
+	<a href="/applications/create">Vytvoriť novú žiadosť</a>
+</div>
+<div>
+	<h3>Moje žiadosti.</h3>
+	{% if applications %}	
+		<table>
+			<tr>
+				<th>#</th>
+				<th>Typ</th> 
+				<th>od</th>
+				<th>do</th>
+				<th>Stav</th>
+			</tr>
+			{% for application in applications %}
+				<tr>
+					<td><a href="{% url 'show' application.id %}">Žiadosť č. {{ application.id }}</a></td>
+					<td>{{ application.type }}</td> 
+					<td>{{ application.begin_date }}</td>
+					<td>{{ application.end_date }}</td> 
+					<td>zamietnuta</td>
+				</tr>
+		    {% endfor %}
+		</table>	
+	{% else %}
+	    <p>Nemáte žiadne žiadosti o dovolenku.</p>
+	{% endif %}
+	
+</div>
