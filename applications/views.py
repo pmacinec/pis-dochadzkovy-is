@@ -8,8 +8,9 @@ def index(request):
 
     # WS get applications of logged in user
     applications = a.get_user_applications(190506)
+    approvals = e.get_manager_approvals(190506)
 
-    return render(request, 'applications/index.html', {'applications': applications})
+    return render(request, 'applications/index.html', {'applications': applications, 'approvals': approvals})
 
 
 def create(request):

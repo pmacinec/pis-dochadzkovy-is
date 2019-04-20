@@ -30,8 +30,10 @@ def get(application_id=None):
     if application_id is None: return
         
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
+    application = client.service.getById(int(application_id))
+    application.state = get_state(application.id)
 
-    return client.service.getById(int(application_id))
+    return application
 
 def get_state(id=None):
 

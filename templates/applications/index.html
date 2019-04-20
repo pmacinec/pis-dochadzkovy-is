@@ -27,3 +27,33 @@
 	{% endif %}
 	
 </div>
+<hr>
+<!-- put here condition for manager session-->
+<div>
+	<a href="/registration">Registrovať zamestnanca</a>
+</div>
+<div>
+	<h3>Žiadosti zamestnancov:</h3>
+	{% if approvals %}	
+		<table>
+			<tr>
+				<th>#</th>
+				<th>Typ</th> 
+				<th>od</th>
+				<th>do</th>
+				<th>Stav</th>
+			</tr>
+			{% for approval in approvals %}
+				<tr>
+					<td><a href="{% url 'show' approval.application.id %}">Žiadosť č. {{ approval.application.id }}</a></td>
+					<td>{{ approval.application.type }}</td> 
+					<td>{{ approval.application.begin_date }}</td>
+					<td>{{ approval.application.end_date }}</td> 
+					<td>{{ approval.application.state }}</td>
+				</tr>
+		    {% endfor %}
+		</table>	
+	{% else %}
+	    <p>Nemáte žiadne žiadosti o schvalenie.</p>
+	{% endif %}	
+</div>
