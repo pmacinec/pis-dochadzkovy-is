@@ -2,12 +2,14 @@ from zeep import Client
 from zeep.xsd import SkipValue
 from functions import employee as e
 from functions import approval as a
+from functions import notifications
 
 def create(application_type=None, begin_date=None, end_date=None, notification_type=None, comment=None, employee_id=None, file=None):
     """Function to create new application using web service."""
 
     if employee_id is None or application_type is None or begin_date is None or end_date is None: return False
 
+    confirmation_types = ['PN','ICR']
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
 
     new_application = {
@@ -22,7 +24,18 @@ def create(application_type=None, begin_date=None, end_date=None, notification_t
         'file' : file if file is not None else SkipValue
     }
 
+
     application_id = client.service.insert('071', 'Vreqif', new_application)
+
+
+    if(application_type in confirmation_types):
+        
+        message = "Dobrý deň, pre udelenie voľna je potrebne doložiť potvrdenie v systéme alebo fyzicky v office."
+        subject = "Doloženie potvrdenia"
+
+        notifications.send_notification(employee_id,notification_type,subject,message)
+
+
 
     create_approvals(employee_id, application_id)
 
@@ -46,6 +59,16 @@ def get(application_id=None):
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
     application = client.service.getById(int(application_id))
     application.state = get_state(application.id)
+
+    return application
+
+def delete(application_id=None):
+    """Function to get application from web service."""
+
+    if application_id is None: return
+        
+    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
+    application = client.service.delete('071', 'Vreqif', int(application_id))
 
     return application
 
