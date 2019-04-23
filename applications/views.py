@@ -58,14 +58,19 @@ def show(request, id):
     return render(
         request, 
         'applications/show.html', 
-        { 'application':application, 'employee':employee, 'managers':managers }
+        { 
+            'application': application, 
+            'employee': employee, 
+            'managers': managers,
+            'is_manager': l.get_logged_employee(request) != application.employee_id
+        }
     )
 
 def approval_show(request, application_id, approval_id):
-    
+    if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+
     if request.method == 'GET':
 
-        if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
         approval = p.get(approval_id)
         application = a.get(application_id)
         employee = e.get(application.employee_id)
@@ -73,12 +78,13 @@ def approval_show(request, application_id, approval_id):
 
         return render(
             request, 
-            'approvals/show.html',
+            'applications/show.html',
             {
-            'approval':approval,
-            'application':application,
-            'employee':employee,
-            'managers':managers
+                'approval': approval,
+                'application': application,
+                'employee': employee,
+                'managers': managers,
+                'is_manager': l.get_logged_employee(request) != application.employee_id
             }
         )
 
@@ -98,12 +104,13 @@ def approval_show(request, application_id, approval_id):
 
         return render(
             request, 
-            'approvals/show.html',
+            'applications/show.html',
             {
                 'approval': approval,
                 'application': application,
                 'employee': employee,
-                'managers': managers
+                'managers': managers,
+                'is_manager': l.get_logged_employee(request) != application.employee_id
             }
         )
 

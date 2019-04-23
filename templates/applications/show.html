@@ -1,5 +1,6 @@
 <!-- Bootstrap Core CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="/applications">Dochádzkový IS</a>
@@ -19,7 +20,7 @@
 
 
 <div class="bg-light" style="height: 100%">
-    <div style="display: block; width: 500px; padding-top: 75px; margin: auto;">
+    <div style="display: block; width: 600px; padding-top: 75px; margin: auto;">
 
         <h4>Žiadosť č. {{ application.id }}</h4>
 
@@ -37,22 +38,46 @@
 		<p>Komentár:  <strong>{{ application.comment }}</strong> </p>
 
 		{% if managers %}	
-			<table>
-				<tr>
+			<table class="table">
+				<thead>
 					<th>Schvaľovateľ</th>
 					<th>Stav</th> 
-					<th>Komentár</th>
-				</tr>
+					{% if not is_manager %}
+						<th class="text-center">Komunikácia</th>
+					{% endif %}
+				</thead>
 				{% for manager in managers %}
 					<tr>
 						<td>{{ manager.name }}</td> 
 						<td>{{ manager.state }}</td>
-						<td></td>
+						{% if not is_manager %}
+							<td class="text-center">
+								<a href="/applications/{{ application.id }}/conversation/{{ manager.id }}">
+									<span class="badge badge-danger"><i class="fa fa-comment"></i></span>
+								</a>
+							</td>
+						{% endif %}
 					</tr>
 				{% endfor %}
 			</table>	
 		{% else %}
 			<p><strong>Žiadni schvaľovatelia</strong></p>
+		{% endif %}
+
+		{% if is_manager %}
+			<form style="width: 20%; float: left" action="{% url 'approval_show' application.id approval.id %}" method="POST">
+				{% csrf_token %}
+				<input type="hidden" name="approved" value = "0">
+				<input type="submit" class="btn btn-danger" value="Zamietnuť">
+			</form>
+
+			<form style="width: 20%; float: left;" action="{% url 'approval_show' application.id approval.id %}" method="POST">
+				{% csrf_token %}
+				<input type="hidden" name="approved" value = "1">
+				<input type="submit" class="btn btn-success" value="Schváliť">
+			</form>
+
+			<div style="float: none; clear: both;"></div>
 		{% endif %}
 
 	</div>	

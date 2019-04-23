@@ -51,7 +51,7 @@
 
 	<br>
 
-	<!-- 2TODO put here condition for manager session-->
+	<!-- @TODO put here condition for manager session-->
 	<div class="card m-3">
 		<h5 class="card-header bg-dark text-light">
 			Žiadosti zamestnancov
@@ -68,7 +68,7 @@
 					</thead>
 					{% for approval in approvals %}
 						<tr>
-							<td><a href="{% url 'show' approval.application.id %}">Žiadosť č. {{ approval.application.id }}</a></td>
+							<td><a href="{% url 'approval_show' approval.application.id approval.id %}">Žiadosť č. {{ approval.application.id }}</a></td>
 							<td>{{ approval.application.type }}</td> 
 							<td>{{ approval.application.begin_date }}</td>
 							<td>{{ approval.application.end_date }}</td> 
