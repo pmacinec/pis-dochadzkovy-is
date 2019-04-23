@@ -1,35 +1,61 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from zeep import Client
 from functions import application as a
 from functions import employee as e
+from functions import login as l
 
 def index(request):
+    # Check if employee is authenticated
+    if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
 
-    # WS get applications of logged in user
-    applications = a.get_user_applications(190506)
-    approvals = e.get_manager_approvals(190506)
+    employee_id = request.session['employee_id']
+    
+    applications = a.get_user_applications(employee_id)
+    approvals = e.get_manager_approvals(employee_id)
 
     return render(request, 'applications/index.html', {'applications': applications, 'approvals': approvals})
 
-
 def create(request):
+    # Check if employee is authenticated
+    if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+
     return render(request, 'applications/create.html')
 
-
 def new(request):
-    print("bbbb")
-    print(request.POST['type'])
-    print(request.POST['begin_date'])
-    print(request.POST['end_date'])
+    # Check if employee is authenticated
+    if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+    
+    application_type = request.POST['type']
+    notification = request.POST['notification']
+    comment = request.POST['comment']
+    begin_date = request.POST['begin_date']
+    end_date = request.POST['end_date']
+    
+    application_id = a.create(
+        application_type, 
+        begin_date, 
+        end_date, 
+        notification,
+        comment, 
+        l.get_logged_employee(request)
+    )
 
-    return True
+    return HttpResponseRedirect('/applications/show/' + str(application_id))
 
-def show(request,id):
+def show(request, id):
+    # Check if employee is authenticated
+    if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+
     application = a.get(id)
     employee = e.get(application.employee_id)
     managers = a.get_managers(application.id)
 
-    return render(request, 'applications/show.html', {'application':application, 'employee':employee, 'managers':managers })
+    return render(
+        request, 
+        'applications/show.html', 
+        { 'application':application, 'employee':employee, 'managers':managers }
+    )
 
 

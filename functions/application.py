@@ -2,10 +2,10 @@ from zeep import Client
 from zeep.xsd import SkipValue
 from functions import employee as e
 
-def create(application_type=None, begin_date=None, end_date=None, notification_type=None, comment=None, employee_id = None, file = None):
+def create(application_type=None, begin_date=None, end_date=None, notification_type=None, comment=None, employee_id=None, file=None):
     """Function to create new application using web service."""
 
-    if employee_id == None or application_type == None or begin_date == None or end_date == None: return False
+    if employee_id is None or application_type is None or begin_date is None or end_date is None: return False
 
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
 
@@ -16,13 +16,12 @@ def create(application_type=None, begin_date=None, end_date=None, notification_t
         'begin_date' : begin_date,
         'end_date' : end_date,
         'notification_type' : notification_type,
-        'comment' : comment,
+        'comment' : comment if comment is not None else SkipValue,
         'employee_id' : employee_id,
-        'file' : file
+        'file' : file if file is not None else SkipValue
     }
 
     return client.service.insert('071', 'Vreqif', new_application)
-
 
 def get(application_id=None):
     """Function to get application from web service."""
@@ -60,7 +59,9 @@ def get_user_applications(user_id=None):
         
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
 
-    applications = client.service.getByAttributeValue('employee_id', str(user_id), (0,1))
+    applications = client.service.getByAttributeValue('employee_id', str(user_id), [])
+    if not applications: return []
+
     for application in applications:
         application.state = get_state(application.id)
 
@@ -72,7 +73,7 @@ def get_approvals(id=None):
 
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071approval?WSDL') 
 
-    return client.service.getByAttributeValue('application_id', str(id), (0,1))
+    return client.service.getByAttributeValue('application_id', str(id), [])
 
 def translate_state(state):
 
@@ -89,8 +90,10 @@ def get_managers(id=None):
     if id is None: return
 
     approvals = get_approvals(id)
-
+    
     managers = []
+    if approvals is None: return managers
+
     for approval in approvals:
         manager = e.get(approval.manager_id)
         manager.state = translate_state(approval.state)
