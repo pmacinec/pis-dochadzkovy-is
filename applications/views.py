@@ -42,14 +42,27 @@ def new(request):
         comment, 
         l.get_logged_employee(request)
     )
+
+    confirmation_types = ['PN','ICR']
     
-    # @TODO dorobit pop up podmienka v create funkcii 
+    if(application_type in confirmation_types):
+        
+        message = "Dobrý deň, pre udelenie voľna je potrebne doložiť potvrdenie v systéme alebo fyzicky v office."
+        subject = "Doloženie potvrdenia"
+
+        notifications.send_notification(employee_id,notification_type,subject,message)
+
+    # if holyday or sick day control limit of free day
+    if(application_type not in confirmation_types) and a.check_limit(application_id, 21):
+
+        return HttpResponseRedirect('/applications/' + str(application_id) + '?alert=limit')
+              
     return HttpResponseRedirect('/applications/' + str(application_id))
     
 
         
 
-def show(request, id):
+def show(request, id, alert=False):
     # Check if employee is authenticated
     if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
 
@@ -57,10 +70,15 @@ def show(request, id):
     employee = e.get(application.employee_id)
     managers = a.get_managers(application.id)
 
+    if request.GET.get('alert'):
+        message = "Pozor! Prečerpali ste limit plateného voľna. Vašu žiadosť môžete zrušiť."
+    else:
+        message = None
+
     return render(
         request, 
         'applications/show.html', 
-        { 'application':application, 'employee':employee, 'managers':managers }
+        { 'application':application, 'employee':employee, 'managers':managers, 'message': message , 'message_type': 'danger'}
     )
 
 def approval_show(request, application_id, approval_id):
