@@ -56,11 +56,7 @@ def complete_registration(request, employee_id):
     if employee is not None and employee.password is not None:
         return HttpResponseRedirect('/')
 
-    return render(
-        request, 
-        'dochadzkovy_is/complete_registration.html',
-        { 'employee_id': employee_id }
-    )
+    return HttpResponseRedirect('/sign-in')
 
 
 # Employee
