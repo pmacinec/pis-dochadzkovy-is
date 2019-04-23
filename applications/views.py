@@ -72,6 +72,7 @@ def show(request, id):
 
 def approval_show(request, application_id, approval_id):
     if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+    current_user = l.get_logged_employee(request)
 
     if request.method == 'GET':
 
@@ -88,7 +89,8 @@ def approval_show(request, application_id, approval_id):
                 'application': application,
                 'employee': employee,
                 'managers': managers,
-                'is_manager': l.get_logged_employee(request) != application.employee_id
+                'is_manager': current_user != application.employee_id,
+                'current_user': current_user
             }
         )
 
@@ -114,7 +116,7 @@ def approval_show(request, application_id, approval_id):
                 'application': application,
                 'employee': employee,
                 'managers': managers,
-                'is_manager': l.get_logged_employee(request) != application.employee_id
+                'is_manager': current_user != application.employee_id
             }
         )
 

@@ -65,17 +65,19 @@
 		{% endif %}
 
 		{% if is_manager %}
-			<form style="width: 20%; float: left" action="{% url 'approval_show' application.id approval.id %}" method="POST">
+			<form style="margin-right: 10px; float: left" action="{% url 'approval_show' application.id approval.id %}" method="POST">
 				{% csrf_token %}
-				<input type="hidden" name="approved" value = "0">
+				<input type="hidden" name="approved" value="0">
 				<input type="submit" class="btn btn-danger" value="Zamietnuť">
 			</form>
 
-			<form style="width: 20%; float: left;" action="{% url 'approval_show' application.id approval.id %}" method="POST">
+			<form style="margin-right: 10px; float: left" action="{% url 'approval_show' application.id approval.id %}" method="POST">
 				{% csrf_token %}
-				<input type="hidden" name="approved" value = "1">
+				<input type="hidden" name="approved" value="1">
 				<input type="submit" class="btn btn-success" value="Schváliť">
 			</form>
+
+			<a style="margin-right: 10px; float: left" class="btn btn-primary" href="/applications/{{ application.id }}/conversation/{{ current_user }}">Napísať komentár</a>
 
 			<div style="float: none; clear: both;"></div>
 		{% endif %}
