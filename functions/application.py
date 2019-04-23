@@ -1,6 +1,7 @@
 from zeep import Client
 from zeep.xsd import SkipValue
 from functions import employee as e
+from functions import approval as a
 
 def create(application_type=None, begin_date=None, end_date=None, notification_type=None, comment=None, employee_id=None, file=None):
     """Function to create new application using web service."""
@@ -21,7 +22,21 @@ def create(application_type=None, begin_date=None, end_date=None, notification_t
         'file' : file if file is not None else SkipValue
     }
 
-    return client.service.insert('071', 'Vreqif', new_application)
+    application_id = client.service.insert('071', 'Vreqif', new_application)
+
+    create_approvals(employee_id, application_id)
+
+    return application_id
+
+def create_approvals(employee_id=None, application_id=None):
+
+    client = Client("http://labss2.fiit.stuba.sk/pis/ws/Students/Team071relationship?WSDL")
+
+    relationships = client.service.getByAttributeValue('employee_id', str(employee_id), [])
+
+    for relationship in relationships:
+        a.create(application_id,relationship.superior_id)
+
 
 def get(application_id=None):
     """Function to get application from web service."""
