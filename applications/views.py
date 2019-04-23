@@ -42,8 +42,12 @@ def new(request):
         comment, 
         l.get_logged_employee(request)
     )
-
+    
+    # @TODO dorobit pop up podmienka v create funkcii 
     return HttpResponseRedirect('/applications/' + str(application_id))
+    
+
+        
 
 def show(request, id):
     # Check if employee is authenticated
@@ -106,5 +110,3 @@ def approval_show(request, application_id, approval_id):
             'managers':managers
             }
         )
-
-

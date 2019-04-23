@@ -27,7 +27,7 @@ def create(application_type=None, begin_date=None, end_date=None, notification_t
 
     application_id = client.service.insert('071', 'Vreqif', new_application)
 
-
+    # control if PN or ICR to send notification about documenting
     if(application_type in confirmation_types):
         
         message = "Dobrý deň, pre udelenie voľna je potrebne doložiť potvrdenie v systéme alebo fyzicky v office."
@@ -35,7 +35,11 @@ def create(application_type=None, begin_date=None, end_date=None, notification_t
 
         notifications.send_notification(employee_id,notification_type,subject,message)
 
-
+    # if holyday or sick day control limit of free day
+    if(application_type not in confirmation_types):
+        if check_limit(application_id,21):
+            # TODO po tejto podmienke treba nejaky ten pop up alebo vlastnu page
+            pass
 
     create_approvals(employee_id, application_id)
 
@@ -139,24 +143,18 @@ def get_managers(id=None):
 
     return managers
 
+def check_limit(application_id, limit):
 
+    application = get(application_id)
 
+    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
 
-# def update(employee_id, password=None, phone=None):
-#     """Function to update employee using web service."""
-    
-#     if employee_id is None: return False
+    applications = client.service.getByAttributeValue('employee_id', str(application.employee_id), [])
 
-#     if password is None and phone is None: return False
+    sum = 0
+    for application in applications:
+        var = application.end_date - application.begin_date
+        sum += var.days
 
-#     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071employee?WSDL')
+    return sum > limit
 
-#     employee_data = {
-#         'id': SkipValue,
-#         'name': SkipValue,
-#         'email': SkipValue,
-#         'password': password if password is not None else SkipValue,
-#         'phone': phone if phone is not None else SkipValue
-#     }
-
-#     return client.service.update('071', 'Vreqif', employee_id, employee_data)
