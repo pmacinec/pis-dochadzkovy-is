@@ -44,7 +44,7 @@ def new(request):
     )
 
     confirmation_types = ['PN','ICR']
-    
+
     if(application_type in confirmation_types):
         
         message = "Dobrý deň, pre udelenie voľna je potrebne doložiť potvrdenie v systéme alebo fyzicky v office."
@@ -63,8 +63,15 @@ def new(request):
         
 
 def show(request, id, alert=False):
+
     # Check if employee is authenticated
     if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+
+    if request.method == 'POST':
+        a.delete(id)
+        print("nejsom tu")
+        return HttpResponseRedirect('/applications/')
+
 
     application = a.get(id)
     employee = e.get(application.employee_id)

@@ -142,3 +142,17 @@ def check_limit(application_id, limit):
 
     return sum > limit
 
+def delete(application_id):
+
+
+    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071approval?WSDL')
+    approvals = client.service.getByAttributeValue('application_id', str(application_id), [])
+    if approvals:
+        for approval in approvals:
+            a.delete(approval.id)
+
+    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
+
+    return client.service.delete('071', 'Vreqif', int(application_id))
+
+

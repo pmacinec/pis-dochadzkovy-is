@@ -37,7 +37,7 @@
 		<p>Komentár:  <strong>{{ application.comment }}</strong> </p>
 
 		{% if managers %}	
-			<table>
+			<table class = "table table-bordered">
 				<tr>
 					<th>Schvaľovateľ</th>
 					<th>Stav</th> 
@@ -55,5 +55,11 @@
 			<p><strong>Žiadni schvaľovatelia</strong></p>
 		{% endif %}
 
+		<form action="{% url 'show' application.id %}" method="POST">
+		    {% csrf_token %}
+		    <button type="submit" class="btn btn-danger">Zrušiť žiadost</button>
+		</form>
+
 	</div>	
+
 </div>

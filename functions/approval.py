@@ -49,5 +49,12 @@ def create(application_id=None,manager_id=None):
 
     notifications.send_email(employee.email, 'Nová žiadosť o schválenie', message)
 
+def delete(approval_id):
+
+    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071approval?WSDL')
+
+    return client.service.delete('071', 'Vreqif', int(approval_id))
+
+
 
     
