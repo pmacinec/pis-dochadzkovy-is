@@ -42,7 +42,7 @@ def new(request):
         l.get_logged_employee(request)
     )
 
-    return HttpResponseRedirect('/applications/show/' + str(application_id))
+    return HttpResponseRedirect('/applications/' + str(application_id))
 
 def show(request, id):
     # Check if employee is authenticated
