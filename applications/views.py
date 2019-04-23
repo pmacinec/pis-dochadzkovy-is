@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from zeep import Client
 from functions import application as a
 from functions import employee as e
+from functions import approval as p
 from functions import login as l
 
 def index(request):
@@ -57,5 +58,53 @@ def show(request, id):
         'applications/show.html', 
         { 'application':application, 'employee':employee, 'managers':managers }
     )
+
+def approval_show(request, application_id, approval_id):
+    
+    if request.method == 'GET':
+
+        if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+        approval = p.get(approval_id)
+        application = a.get(application_id)
+        employee = e.get(application.employee_id)
+        managers = a.get_managers(application_id)
+
+
+
+        return render(
+            request, 
+            'approvals/show.html',
+            {
+            'approval':approval,
+            'application':application,
+            'employee':employee,
+            'managers':managers
+            }
+        )
+
+    elif request.method == 'POST':
+
+        if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+
+        if request.POST['approved'] == "1":
+            p.update(approval_id, 1)
+        else:
+            p.update(approval_id, 2)
+
+        approval = p.get(approval_id)
+        application = a.get(application_id)
+        employee = e.get(application.employee_id)
+        managers = a.get_managers(application_id)
+
+        return render(
+            request, 
+            'approvals/show.html',
+            {
+            'approval':approval,
+            'application':application,
+            'employee':employee,
+            'managers':managers
+            }
+        )
 
 
