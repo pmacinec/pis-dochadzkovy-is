@@ -1,15 +1,30 @@
-<h1>Prihlásenie</h1>
+<!-- Bootstrap Core CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-{% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
+<div class="bg-light" style="height: 100%">
+    <div style="display: block; width: 400px; padding-top: 150px; margin: auto;">
+        <h4>Prihlásenie</h4>
+        
+        {% if message %}
+            <div class="alert alert-{{ message_type }} success" role="alert">
+                {{ message }}                
+            </div>
+        {% endif %}
 
-<form action="{% url 'login' %}" method="post">
-    {% csrf_token %}
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
 
-    <label>Email</label>
-    <input type="email" name="email">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" name="email">
+            </div>
 
-    <label>Heslo</label>
-    <input type="password" name="password">
+            <div class="form-group">
+                <label>Heslo</label>
+                <input type="password" class="form-control" name="password">
+            </div>
 
-    <input type="submit" value="Prihlásiť">
-</form>
+            <input type="submit" class="btn btn-dark" value="Prihlásiť">
+        </form>
+    </div>
+</div>

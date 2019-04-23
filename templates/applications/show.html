@@ -1,29 +1,59 @@
-<h1>Žiadosť č. {{ application.id }} </h1>
+<!-- Bootstrap Core CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<p>Meno: <strong>{{ employee.name }}</strong> </p>
-<p>Dátum od <strong>{{application.begin_date}}</strong> do <strong>{{application.end_date}}</strong></p>
-<p>Typ:  <strong>{{ application.type }}</strong> </p>
-<p>Komentár:  <strong>{{ application.comment }}</strong> </p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/applications">Dochádzkový IS</a>
 
-<div>
-	{% if managers %}	
-		<table>
-			<tr>
-				<th>Schvaľovateľ</th>
-				<th>Stav</th> 
-				<th>Komentár</th>
-			</tr>
-			{% for manager in managers %}
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active" style="margin-right: 15px; margin-left: 30px;">
+        <a class="btn btn-outline-light my-2 my-sm-0 text-light" href="/applications/create">Vytvoriť novú žiadosť <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="btn btn-outline-light my-2 my-sm-0 text-light" href="/registration">Registrovať nového zamestnanca</a>
+      </li>
+    </ul>
+	<a class="btn btn-outline-light my-2 my-sm-0 text-light" href="/logout">Odhlásenie</a>
+  </div>
+</nav>
+
+
+<div class="bg-light" style="height: 100%">
+    <div style="display: block; width: 500px; padding-top: 75px; margin: auto;">
+
+        <h4>Žiadosť č. {{ application.id }}</h4>
+
+        <hr>
+
+        {% if message %}
+            <div class="alert alert-{{ message_type }} success" role="alert">
+                {{ message }}                
+            </div>
+		{% endif %}
+
+		<p>Meno: <strong>{{ employee.name }}</strong> </p>
+		<p>Dátum: od <strong>{{application.begin_date}}</strong> do <strong>{{application.end_date}}</strong></p>
+		<p>Typ:  <strong>{{ application.type }}</strong> </p>
+		<p>Komentár:  <strong>{{ application.comment }}</strong> </p>
+
+		{% if managers %}	
+			<table>
 				<tr>
-					<td>{{ manager.name }}</td> 
-					<td>{{ manager.state }}</td>
-					<td></td>
+					<th>Schvaľovateľ</th>
+					<th>Stav</th> 
+					<th>Komentár</th>
 				</tr>
-		    {% endfor %}
-		</table>	
-	{% else %}
-	    <p>Žiadni schvaľovatelia</p>
-	{% endif %}
-	
-</div>
+				{% for manager in managers %}
+					<tr>
+						<td>{{ manager.name }}</td> 
+						<td>{{ manager.state }}</td>
+						<td></td>
+					</tr>
+				{% endfor %}
+			</table>	
+		{% else %}
+			<p><strong>Žiadni schvaľovatelia</strong></p>
+		{% endif %}
 
+	</div>	
+</div>
