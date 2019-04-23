@@ -8,6 +8,7 @@ from functions import approval as p
 from functions import login as l
 from functions import comment as c
 from functions import notifications as n
+from functions import validator as v
 
 def index(request):
     # Check if employee is authenticated
@@ -39,13 +40,25 @@ def new(request):
     comment = request.POST['comment']
     begin_date = request.POST['begin_date']
     end_date = request.POST['end_date']
-    
+    errors = []
+    if not v.validate_date(begin_date, end_date):
+        errors += ["Dátum začiatku čerpania nemôže byť neskorší, ako koniec čerpania!"]
+
+    if not v.validate_length(comment, max_length=500):
+        errors += ["Príliš dlhý kommentár, prosím napíšte kratšiu správu!"]
+    if errors:
+        return render(
+            request,
+            'applications/create.html',
+            {'message_type': "danger", "message": '\n'.join(errors)}
+        )
+
     application_id = a.create(
-        application_type, 
-        begin_date, 
-        end_date, 
+        application_type,
+        begin_date,
+        end_date,
         notification,
-        comment, 
+        comment,
         l.get_logged_employee(request)
     )
 

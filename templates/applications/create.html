@@ -17,6 +17,11 @@
   </div>
 </nav>
 
+<style>
+    .alert{
+        white-space: pre-line;
+    }
+</style>
 
 <div class="bg-light" style="height: 100%">
     <div style="display: block; width: 400px; padding-top: 75px; margin: auto;">
@@ -24,8 +29,7 @@
         <h4>Podanie žiadosti o pracovné voľno</h4>
 
         {% if message %}
-            <div class="alert alert-{{ message_type }} success" role="alert">
-                {{ message }}                
+            <div class="alert alert-{{ message_type }} success" role="alert">{{ message }}
             </div>
         {% endif %}
 
