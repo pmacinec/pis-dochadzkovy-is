@@ -27,11 +27,18 @@ def registrate(request):
     name = request.POST['name']
     email = request.POST['email']
 
+    errors = []
+    if not validator.validate_length(name,min_length=2, max_length=50):
+        errors += ["Zadajte prosím meno z rozsahu 2 až 50 znakov!"]
+
     if not validator.validate_email(email):
+        errors += ['Zadajte prosím platný email.']
+
+    if errors:
         return render(
             request,
             'dochadzkovy_is/registration.html',
-            { 'message_type': 'error', 'message': 'Zadajte prosím platný email.' }
+            {'message_type': "danger", "message": '\n'.join(errors)}
         )
 
     # create new employee using web service
