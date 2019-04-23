@@ -11,7 +11,7 @@ from functions import login as l
 
 # Create your views here.
 def index(request):
-    return HttpResponse('Hello World.')
+    return render(request, 'dochadzkovy_is/index.html')
 
 # Registration
 def registration(request):
