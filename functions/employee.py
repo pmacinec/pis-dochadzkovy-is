@@ -1,6 +1,7 @@
 from zeep import Client
 from zeep.xsd import SkipValue
 from functions import application as a
+from functions import validator
 
 def create(name=None, email=None, password=None, phone=None):
     """Function to create new employee using web service."""
@@ -48,6 +49,14 @@ def update(employee_id, password=None, phone=None):
     }
 
     return client.service.update('071', 'Vreqif', employee_id, employee_data)
+
+def get_by_email(email):
+    
+    if not validator.validate_email(email): return False
+    
+    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071employee?WSDL')
+
+    return client.service.getByAttributeValue('email', email, [])
 
 def get_manager_approvals(id=None):
 

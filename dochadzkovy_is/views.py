@@ -7,14 +7,17 @@ from functions import notifications
 from functions import passwords
 from functions import validator
 from functions import employee as e
+from functions import login as l
 
 # Create your views here.
 def index(request):
     return HttpResponse('Hello World.')
 
-
 # Registration
 def registration(request):
+    # Check if employee is authenticated
+    if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+
     return render(request, 'dochadzkovy_is/registration.html')
 
 def registrate(request):
@@ -99,3 +102,25 @@ def update_employee(request):
         'dochadzkovy_is/complete_registration.html', 
         message
     )
+
+
+# Login
+def sign_in(request):
+    return render(request, 'dochadzkovy_is/sign_in.html')
+
+def login(request):
+    email = request.POST['email']
+    password = request.POST['password']
+
+    if l.login(request, email, password):
+        return HttpResponseRedirect('/applications')
+    else:
+        return render(
+            request,
+            'dochadzkovy_is/sign_in.html',
+            { 'message': 'Nesprávne prihlasovacie údaje.' }
+        )
+
+def logout(request):
+    l.logout(request)
+    return HttpResponseRedirect('/sign-in')
