@@ -13,12 +13,16 @@ def index(request):
     # Check if employee is authenticated
     if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
 
-    employee_id = request.session['employee_id']
+    employee_id = l.get_logged_employee(request)
     
     applications = a.get_user_applications(employee_id)
     approvals = e.get_manager_approvals(employee_id)
 
-    return render(request, 'applications/index.html', {'applications': applications, 'approvals': approvals})
+    return render(
+        request, 
+        'applications/index.html',
+        { 'applications': applications, 'approvals': approvals, 'is_manager': e.is_manager(employee_id) }
+    )
 
 def create(request):
     # Check if employee is authenticated

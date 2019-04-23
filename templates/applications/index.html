@@ -51,7 +51,7 @@
 
 	<br>
 
-	<!-- @TODO put here condition for manager session-->
+	{% if is_manager %}
 	<div class="card m-3">
 		<h5 class="card-header bg-dark text-light">
 			Žiadosti zamestnancov
@@ -81,4 +81,5 @@
 			{% endif %}	
 		</div>
 	</div>
+	{% endif %}
 </div>
