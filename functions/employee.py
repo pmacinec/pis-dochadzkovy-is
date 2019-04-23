@@ -89,7 +89,5 @@ def is_manager(employee_id):
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071relationship?WSDL')
 
     employees = client.service.getByAttributeValue('superior_id', employee_id, [])
-    
-    print(employees)
 
     return False if employees is None or len(employees) == 0 else True
