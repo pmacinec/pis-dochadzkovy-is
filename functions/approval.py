@@ -25,3 +25,17 @@ def update(approval_id=None,state=None):
     client.service.update('071', 'Vreqif', approval.id, approval)
 
     return approval
+
+def create(application_id=None,manager_id=None):
+
+    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071approval?WSDL')
+
+    new_approval = {
+        'id' : SkipValue,
+        'name': '',
+        'application_id' : application_id,
+        'manager_id': manager_id,
+        'state' : 0
+    }
+
+    client.service.insert('071', 'Vreqif', new_approval)
