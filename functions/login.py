@@ -26,5 +26,3 @@ def is_logged(request):
 def get_logged_employee(request):
     if is_logged(request):
         return request.session['employee_id']
-    else:
-        return False

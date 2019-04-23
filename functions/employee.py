@@ -3,10 +3,10 @@ from zeep.xsd import SkipValue
 from functions import application as a
 from functions import validator
 
-def create(name=None, email=None, password=None, phone=None):
+def create(name, email, manager_id, password=None, phone=None):
     """Function to create new employee using web service."""
 
-    if name == None or email == None: return False
+    if name is None or email is None or manager_id is None: return False
 
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071employee?WSDL')
 
@@ -18,7 +18,19 @@ def create(name=None, email=None, password=None, phone=None):
         'phone': phone if phone is not None else SkipValue
     }
 
-    return client.service.insert('071', 'Vreqif', new_employee)
+    employee_id = client.service.insert('071', 'Vreqif', new_employee)
+
+    # Create relationship between manager and employee
+    relationships_client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071relationship?WSDL')
+    relationship = {
+        'id': SkipValue,
+        'name': '',
+        'employee_id': employee_id,
+        'superior_id': manager_id
+    }
+    relationships_client.service.insert('071', 'Vreqif', relationship)
+
+    return employee_id
 
 
 def get(employee_id):
@@ -64,7 +76,7 @@ def get_manager_approvals(id=None):
 
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071approval?WSDL') 
 
-    approvals = client.service.getByAttributeValue('manager_id', str(id), (0,1))
+    approvals = client.service.getByAttributeValue('manager_id', str(id), [])
 
     if not approvals: return
 

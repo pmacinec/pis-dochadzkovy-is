@@ -21,7 +21,9 @@ def registration(request):
     return render(request, 'dochadzkovy_is/registration.html')
 
 def registrate(request):
-
+    # Check if employee is authenticated
+    if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+    
     name = request.POST['name']
     email = request.POST['email']
 
@@ -33,7 +35,7 @@ def registrate(request):
         )
 
     # create new employee using web service
-    employee_id = e.create(name, email)
+    employee_id = e.create(name, email, l.get_logged_employee(request))
 
     message = 'Dobrý deň ' + name + ', práve ste boli zaregistrovaní. Kliknite prosím, na nasledujúci odkaz\
                 pre doplnenie údajov: /complete_registration/' + str(employee_id)
