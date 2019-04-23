@@ -38,7 +38,7 @@ def registrate(request):
     employee_id = e.create(name, email, l.get_logged_employee(request))
 
     message = 'Dobrý deň ' + name + ', práve ste boli zaregistrovaní. Kliknite prosím, na nasledujúci odkaz\
-                pre doplnenie údajov: /complete_registration/' + str(employee_id)
+                pre doplnenie údajov: /complete-registration/' + str(employee_id)
 
     notifications.send_email(email, 'Nová registrácia', message)
 
