@@ -1,0 +1,15 @@
+<h1>Prihlásenie</h1>
+
+{% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
+
+<form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+
+    <label>Email</label>
+    <input type="email" name="email">
+
+    <label>Heslo</label>
+    <input type="password" name="password">
+
+    <input type="submit" value="Prihlásiť">
+</form>
