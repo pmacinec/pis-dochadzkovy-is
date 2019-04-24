@@ -129,6 +129,8 @@ def check_limit(application_type, employee_id):
     confirmation_types = ['sickday','holiday']
 
     summary = 0
+    if applications is None or len(applications) == 0: return False
+        
     for application in applications:
         if (application.type in confirmation_types):
             var = application.end_date - application.begin_date
