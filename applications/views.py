@@ -44,7 +44,7 @@ def new(request):
     if not v.validate_date(begin_date, end_date):
         errors += ["Dátum začiatku čerpania nemôže byť neskorší, ako koniec čerpania!"]
 
-    if not v.validate_length(comment, max_length=500):
+    if not v.validate_length(comment, min_length=0, max_length=500):
         errors += ["Príliš dlhý kommentár, prosím napíšte kratšiu správu!"]
     if errors:
         return render(

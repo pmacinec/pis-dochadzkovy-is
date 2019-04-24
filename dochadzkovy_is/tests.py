@@ -8,6 +8,7 @@ class ValidatorTestCase(TestCase):
         self.assertTrue(v.validate_length("a" * 10))
         self.assertTrue(v.validate_length("Peter"))
         self.assertTrue(v.validate_length("Frantisek"))
+        self.assertTrue(v.validate_length("", min_length=0))
         self.assertTrue(v.validate_length("""Dobry den, dneska sa mi strasne nechce do prace, tak radsej by som
                                              nerobil nic uzitocne, ako Vajk na tomto projekte a ostal spinkat doma
                                              v tepluckej posteli. Toto je test na dlzku komentarov. PIS je top predmet,
