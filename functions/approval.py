@@ -2,6 +2,7 @@ from zeep import Client
 from zeep.xsd import SkipValue
 from functions import notifications
 from functions import employee as e
+from functions import application as a 
 
 
 def get(approval_id=None):
@@ -25,6 +26,9 @@ def update(approval_id=None,state=None):
     approval.name = ""
 
     client.service.update('071', 'Vreqif', approval.id, approval)
+
+    # check if applicaiton is now approved or canceled, then notify employee
+    a.check_state_and_notify(approval.application_id)
 
     return approval
 
