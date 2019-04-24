@@ -106,7 +106,11 @@ def update_employee(request):
     else:
         message = { 'message_type': 'danger', 'message': 'Vyskytla sa chyba pri ukladaní údajov.' }
 
-    return HttpResponseRedirect('/sign-in')
+    return render(
+        request, 
+        'dochadzkovy_is/complete_registration.html', 
+        message
+    )
 
 
 # Login
