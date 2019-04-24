@@ -6,6 +6,7 @@ from functions import application as a
 from functions import employee as e
 from functions import approval as p
 from functions import login as l
+from functions import notifications as n
 
 def index(request):
     # Check if employee is authenticated
@@ -46,21 +47,11 @@ def new(request):
     confirmation_types = ['PN','ICR']
 
     if(application_type in confirmation_types):
-        
         message = "Dobrý deň, pre udelenie voľna je potrebne doložiť potvrdenie v systéme alebo fyzicky v office."
         subject = "Doloženie potvrdenia"
-
-        notifications.send_notification(employee_id,notification_type,subject,message)
-
-    # if holyday or sick day control limit of free day
-    if(application_type not in confirmation_types) and a.check_limit(application_id, 21):
-
-        return HttpResponseRedirect('/applications/' + str(application_id) + '?alert=limit')
+        n.send_notification(l.get_logged_employee(request), notification, subject, message)
               
     return HttpResponseRedirect('/applications/' + str(application_id))
-    
-
-        
 
 def show(request, id, alert=False):
 

@@ -22,4 +22,3 @@ def send_notification(employee_id, type, subject, message):
 		res = client.service.notify('071', 'Vreqif', employee.phone, subject, message)
 
 	return True if res == 'success' else False
-    

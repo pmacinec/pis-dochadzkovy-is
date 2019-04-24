@@ -25,6 +25,12 @@
 
         <hr>
 
+				{% if application.limit %}
+					<div class="alert alert-warning success" role="alert">
+						Pozor, táto žiadosť prekračuje limit plateného voľna.
+					</div>
+				{% endif %}
+
         {% if message %}
             <div class="alert alert-{{ message_type }} success" role="alert">
                 {{ message }}                

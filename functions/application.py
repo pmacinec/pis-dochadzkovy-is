@@ -4,6 +4,8 @@ from functions import employee as e
 from functions import approval as a
 from functions import notifications
 
+holiday_limit = 5
+
 def create(application_type=None, begin_date=None, end_date=None, notification_type=None, comment=None, employee_id=None, file=None):
     """Function to create new application using web service."""
 
@@ -20,7 +22,8 @@ def create(application_type=None, begin_date=None, end_date=None, notification_t
         'notification_type' : notification_type,
         'comment' : comment if comment is not None else SkipValue,
         'employee_id' : employee_id,
-        'file' : file if file is not None else SkipValue
+        'file' : file if file is not None else SkipValue,
+        'limit': check_limit(application_type, employee_id)
     }
 
     application_id = client.service.insert('071', 'Vreqif', new_application)
@@ -47,16 +50,6 @@ def get(application_id=None):
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
     application = client.service.getById(int(application_id))
     application.state = get_state(application.id)
-
-    return application
-
-def delete(application_id=None):
-    """Function to get application from web service."""
-
-    if application_id is None: return
-        
-    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
-    application = client.service.delete('071', 'Vreqif', int(application_id))
 
     return application
 
@@ -127,23 +120,23 @@ def get_managers(id=None):
 
     return managers
 
-def check_limit(application_id, limit):
-
-    application = get(application_id)
+def check_limit(application_type, employee_id):
 
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071application?WSDL')
 
-    applications = client.service.getByAttributeValue('employee_id', str(application.employee_id), [])
+    applications = client.service.getByAttributeValue('employee_id', str(employee_id), [])
 
-    sum = 0
+    confirmation_types = ['sickday','holiday']
+
+    summary = 0
     for application in applications:
-        var = application.end_date - application.begin_date
-        sum += var.days
+        if (application.type in confirmation_types):
+            var = application.end_date - application.begin_date
+            summary += var.days
 
-    return sum > limit
+    return summary > holiday_limit
 
 def delete(application_id):
-
 
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071approval?WSDL')
     approvals = client.service.getByAttributeValue('application_id', str(application_id), [])
