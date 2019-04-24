@@ -85,26 +85,39 @@ def update_employee(request):
     if not employee or employee.password is not None:
         return HttpResponseRedirect('/')
 
+    validation_errors = []
+
+    if not validator.validate_phone(phone): 
+        validation_errors += ['Telefónne číslo je v nesprávnom tvare.']
+
     if str(password) == str(password_repeat):
         password_to_store = passwords.hash_password(str(password))
     else:
-        return render(
-            request, 
-            'dochadzkovy_is/complete_registration.html', 
-            { 'message_type': 'danger', 'message': 'Heslá sa nezhodujú.' }
-        )
+        validation_errors += ['Heslá sa nezhodujú.']
 
-    if not validator.validate_phone(phone): 
+    if len(validation_errors) != 0:
         return render(
             request, 
             'dochadzkovy_is/complete_registration.html', 
-            { 'message_type': 'danger', 'message': 'Telefónne číslo je v nesprávnom tvare.' }
+            { 
+                'message_type': 'danger',
+                'message': '\n'.join(validation_errors),
+                'employee_id': employee_id
+            }
         )
 
     if e.update(employee_id, password_to_store, phone):
-        message = { 'message_type': 'success', 'message': 'Informácie úspešne uložené.' }
+        message = { 
+            'message_type': 'success',
+            'message': 'Informácie úspešne uložené.',
+            'employee_id': employee_id
+        }
     else:
-        message = { 'message_type': 'danger', 'message': 'Vyskytla sa chyba pri ukladaní údajov.' }
+        message = { 
+            'message_type': 'danger',
+            'message': 'Vyskytla sa chyba pri ukladaní údajov.',
+            'employee_id': employee_id
+        }
 
     return render(
         request, 

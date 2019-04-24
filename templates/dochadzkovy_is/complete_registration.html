@@ -2,13 +2,11 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <div class="bg-light" style="height: 100%">
-    <div style="display: block; width: 400px; padding-top: 150px; margin: auto;">
+    <div style="display: block; width: 600px; padding-top: 150px; margin: auto;">
         <h4>Dokončenie registrácie - doplnenie údajov</h4>
         
         {% if message %}
-            <div class="alert alert-{{ message_type }} success" role="alert">
-                {{ message }}                
-            </div>
+            <div style="white-space: pre-line;" class="alert alert-{{ message_type }} success" role="alert">{{ message }}</div>
         {% endif %}
 
         <form action="{% url 'update_employee' %}" method="post">
@@ -18,7 +16,7 @@
 
             <div class="form-group">
                 <label>Tel. číslo</label>
-                <input type="tel" name="phone">
+                <input type="tel" class="form-control" name="phone">
             </div>
 
             <div class="form-group">
