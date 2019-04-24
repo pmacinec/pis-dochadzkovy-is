@@ -91,20 +91,20 @@ def update_employee(request):
         return render(
             request, 
             'dochadzkovy_is/complete_registration.html', 
-            { 'message_type': 'error', 'message': 'Heslá sa nezhodujú.' }
+            { 'message_type': 'danger', 'message': 'Heslá sa nezhodujú.' }
         )
 
     if not validator.validate_phone(phone): 
         return render(
             request, 
             'dochadzkovy_is/complete_registration.html', 
-            { 'message_type': 'error', 'message': 'Telefónne číslo je v nesprávnom tvare.' }
+            { 'message_type': 'danger', 'message': 'Telefónne číslo je v nesprávnom tvare.' }
         )
 
     if e.update(employee_id, password_to_store, phone):
         message = { 'message_type': 'success', 'message': 'Informácie úspešne uložené.' }
     else:
-        message = { 'message_type': 'error', 'message': 'Vyskytla sa chyba pri ukladaní údajov.' }
+        message = { 'message_type': 'danger', 'message': 'Vyskytla sa chyba pri ukladaní údajov.' }
 
     return HttpResponseRedirect('/sign-in')
 
