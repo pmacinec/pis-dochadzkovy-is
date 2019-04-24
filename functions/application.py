@@ -38,6 +38,8 @@ def create_approvals(employee_id=None, application_id=None):
 
     relationships = client.service.getByAttributeValue('employee_id', str(employee_id), [])
 
+    if not relationships: return False
+
     for relationship in relationships:
         a.create(application_id,relationship.superior_id)
 
