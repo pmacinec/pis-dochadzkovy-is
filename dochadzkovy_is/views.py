@@ -59,11 +59,15 @@ def registrate(request):
 def complete_registration(request, employee_id):
 
     employee = e.get(employee_id)
-    print(employee)
+
     if employee is not None and employee.password is not None:
         return HttpResponseRedirect('/')
 
-    return HttpResponseRedirect('/sign-in')
+    return render(
+        request, 
+        'dochadzkovy_is/complete_registration.html',
+        { 'employee_id': employee_id }
+    )
 
 
 # Employee
