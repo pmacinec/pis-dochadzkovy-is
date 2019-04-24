@@ -156,3 +156,23 @@ def delete(application_id):
     return client.service.delete('071', 'Vreqif', int(application_id))
 
 
+def check_state_and_notify(application_id):
+
+    state = get_state(application_id)
+    application = get(application_id)
+    employee = e.get(application.employee_id)
+
+    if state == "zamietnuté":
+        subject = "Zamietnutá žiadosť"
+        message = "Vaša žiadosť č."+ str(application.id) +" o udelenie voľna bola zamietnutá"
+        notifications.send_notification(employee.id, application.notification_type, subject, message)
+
+
+    elif state == "schválené":
+        subject = "Schvalená žiadosť"
+        message = "Vaša žiadosť č."+ str(application.id) +" o udelenie voľna bola Schvalená"
+        notifications.send_notification(employee.id, application.notification_type, subject, message)
+
+
+
+
