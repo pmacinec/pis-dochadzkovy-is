@@ -70,13 +70,13 @@ def get_by_email(email):
 
     return client.service.getByAttributeValue('email', email, [])
 
-def get_manager_approvals(id=None):
+def get_manager_approvals(manager_id=None):
 
-    if id is None: return
+    if manager_id is None: return
 
     client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071approval?WSDL') 
 
-    approvals = client.service.getByAttributeValue('manager_id', str(id), [])
+    approvals = client.service.getByAttributeValue('manager_id', str(manager_id), [])
 
     if not approvals: return
 

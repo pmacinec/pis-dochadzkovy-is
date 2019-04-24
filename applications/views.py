@@ -62,15 +62,34 @@ def new(request):
         l.get_logged_employee(request)
     )
 
+    confirmation_types = ['PN','ICR']
+
+    if(application_type in confirmation_types):
+        message = "Dobrý deň, pre udelenie voľna je potrebne doložiť potvrdenie v systéme alebo fyzicky v office."
+        subject = "Doloženie potvrdenia"
+        n.send_notification(l.get_logged_employee(request), notification, subject, message)
+              
     return HttpResponseRedirect('/applications/' + str(application_id))
 
-def show(request, id):
+def show(request, id, alert=False):
+
     # Check if employee is authenticated
     if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
+
+    if request.method == 'POST':
+        a.delete(id)
+        print("nejsom tu")
+        return HttpResponseRedirect('/applications/')
+
 
     application = a.get(id)
     employee = e.get(application.employee_id)
     managers = a.get_managers(application.id)
+
+    if request.GET.get('alert'):
+        message = "Pozor! Prečerpali ste limit plateného voľna. Vašu žiadosť môžete zrušiť."
+    else:
+        message = None
 
     return render(
         request, 
@@ -133,7 +152,7 @@ def approval_show(request, application_id, approval_id):
             }
         )
 
-
+        
 # Comments
 def conversation(request, application_id, manager_id):
     if not l.is_logged(request): return HttpResponseRedirect('/sign-in')
@@ -177,3 +196,4 @@ def send_message(request, application_id, manager_id):
         )
 
     return HttpResponseRedirect('/applications/' + str(application_id) + '/conversation/' + str(manager_id))
+

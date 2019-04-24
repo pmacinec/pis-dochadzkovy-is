@@ -26,6 +26,12 @@
 
         <hr>
 
+				{% if application.limit %}
+					<div class="alert alert-warning success" role="alert">
+						Pozor, táto žiadosť prekračuje limit plateného voľna.
+					</div>
+				{% endif %}
+
         {% if message %}
             <div class="alert alert-{{ message_type }} success" role="alert">
                 {{ message }}                
@@ -37,8 +43,8 @@
 		<p>Typ:  <strong>{{ application.type }}</strong> </p>
 		<p>Komentár:  <strong>{{ application.comment }}</strong> </p>
 
-		{% if managers %}	
-			<table class="table">
+		{% if managers %}
+			<table class = "table table-bordered">
 				<thead>
 					<th>Schvaľovateľ</th>
 					<th>Stav</th> 
@@ -64,6 +70,7 @@
 			<p><strong>Žiadni schvaľovatelia</strong></p>
 		{% endif %}
 
+
 		{% if is_manager %}
 			<form style="margin-right: 10px; float: left" action="{% url 'approval_show' application.id approval.id %}" method="POST">
 				{% csrf_token %}
@@ -82,5 +89,12 @@
 			<div style="float: none; clear: both;"></div>
 		{% endif %}
 
+		<form action="{% url 'show' application.id %}" method="POST">
+		    {% csrf_token %}
+		    <button type="submit" class="btn btn-danger">Zrušiť žiadost</button>
+		</form>
+ 
+
 	</div>	
+
 </div>

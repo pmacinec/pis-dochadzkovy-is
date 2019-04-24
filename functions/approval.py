@@ -1,5 +1,8 @@
 from zeep import Client
 from zeep.xsd import SkipValue
+from functions import notifications
+from functions import employee as e
+from functions import application as a 
 
 
 def get(approval_id=None):
@@ -24,6 +27,9 @@ def update(approval_id=None,state=None):
 
     client.service.update('071', 'Vreqif', approval.id, approval)
 
+    # check if applicaiton is now approved or canceled, then notify employee
+    a.check_state_and_notify(approval.application_id)
+
     return approval
 
 def create(application_id=None,manager_id=None):
@@ -38,4 +44,21 @@ def create(application_id=None,manager_id=None):
         'state' : 0
     }
 
-    client.service.insert('071', 'Vreqif', new_approval)
+    approval_id = client.service.insert('071', 'Vreqif', new_approval)
+
+    employee = e.get(manager_id)
+
+    message = 'Dobrý deň ' + employee.name + ', obdržali ste žiadosť o schválenie žiadosti o voľno. Kliknite prosím, na nasledujúci odkaz: \
+    /application/' + str(application_id) + '/approval/' + str(approval_id)
+
+    notifications.send_email(employee.email, 'Nová žiadosť o schválenie', message)
+
+def delete(approval_id):
+
+    client = Client('http://labss2.fiit.stuba.sk/pis/ws/Students/Team071approval?WSDL')
+
+    return client.service.delete('071', 'Vreqif', int(approval_id))
+
+
+
+    
