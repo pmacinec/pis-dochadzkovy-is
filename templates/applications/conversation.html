@@ -1,0 +1,53 @@
+<!-- Bootstrap Core CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/applications">Dochádzkový IS</a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active" style="margin-right: 15px; margin-left: 30px;">
+        <a class="btn btn-outline-light my-2 my-sm-0 text-light" href="/applications/create">Vytvoriť novú žiadosť <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="btn btn-outline-light my-2 my-sm-0 text-light" href="/registration">Registrovať nového zamestnanca</a>
+      </li>
+    </ul>
+	<a class="btn btn-outline-light my-2 my-sm-0 text-light" href="/logout">Odhlásenie</a>
+  </div>
+</nav>
+
+
+<div class="bg-light" style="height: 100%">
+    <div style="display: block; width: 700px; padding-top: 75px; margin: auto;">
+
+        <h4>Konverzácia k žiadosti č. {{ application_id }}</h4>
+        
+        <hr>
+
+        {% for message in messages %}
+            {% if message.sender_id == user_id %}
+                <div class="card bg-white border-dark mt-2" style="width: 70%; margin-left: 30%">
+            {% else %}
+                <div class="card bg-primary text-white mt-2" style="width: 70%;">
+            {% endif %}
+                    <div class="card-body">
+                        <p class="card-text">{{ message.message }}</p>
+                    </div>
+                </div>
+        {% endfor %}
+
+        <hr>
+
+        <form action="{% url 'send_message' application_id manager_id %}" method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <textarea rows="4" cols="50" name="message" class="form-control" placeholder="Vložte komentár..."></textarea>
+            </div>
+
+            <input type="submit" class="btn btn-dark" value="Odoslať">
+            <a class="btn btn-primary" href="/applications/{{ aplication_id }}">Späť</a>
+        </form>
+    </div>
+</div>

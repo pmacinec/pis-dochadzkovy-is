@@ -1,0 +1,75 @@
+<!-- Bootstrap Core CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/applications">Dochádzkový IS</a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active" style="margin-right: 15px; margin-left: 30px;">
+        <a class="btn btn-outline-light my-2 my-sm-0 text-light" href="/applications/create">Vytvoriť novú žiadosť <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="btn btn-outline-light my-2 my-sm-0 text-light" href="/registration">Registrovať nového zamestnanca</a>
+      </li>
+    </ul>
+	<a class="btn btn-outline-light my-2 my-sm-0 text-light" href="/logout">Odhlásenie</a>
+  </div>
+</nav>
+
+<style>
+    .alert{
+        white-space: pre-line;
+    }
+</style>
+
+<div class="bg-light" style="height: 100%">
+    <div style="display: block; width: 400px; padding-top: 75px; margin: auto;">
+
+        <h4>Podanie žiadosti o pracovné voľno</h4>
+
+        {% if message %}
+            <div class="alert alert-{{ message_type }} success" role="alert">{{ message }}
+            </div>
+        {% endif %}
+
+        <form action="{% url 'new' %}" method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Typ voľna</label>
+                <select name="type" class="form-control">
+                    <option value="PN">PN</option>
+                    <option value="ICR">IČR</option>
+                    <option value="holiday">Dovolenka</option>
+                    <option value="sickday">Sickday</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Trvanie od</label>
+                <input type="date" class="form-control" name="begin_date">
+            </div>
+
+            <div class="form-group">
+                <label>Trvanie do</label>
+                <input type="date" class="form-control" name="end_date">
+            </div>
+
+            <div class="form-group">
+                <label>Spôsob upozornenia</label>
+                <select name="notification" class="form-control">
+                    <option value="sms">SMS</option>
+                    <option value="email">email</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Komentár</label>
+                <textarea rows="4" cols="50" name="comment" class="form-control" placeholder="Vložte kommentár..."></textarea>
+            </div>
+
+            <input type="submit" class="btn btn-dark" value="Vytvoriť žiadosť">
+        </form>
+    </div>
+</div>
