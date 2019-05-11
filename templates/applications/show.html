@@ -89,11 +89,12 @@
 			<div style="float: none; clear: both;"></div>
 		{% endif %}
 
-		<form action="{% url 'show' application.id %}" method="POST">
-		    {% csrf_token %}
-		    <button type="submit" class="btn btn-danger">Zrušiť žiadost</button>
-		</form>
- 
+		{% if not is_manager %}
+			<form action="{% url 'show' application.id %}" method="POST">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-danger">Zrušiť žiadost</button>
+			</form>
+		{% endif %}
 
 	</div>	
 

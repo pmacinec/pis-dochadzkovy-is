@@ -43,10 +43,11 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <textarea rows="4" cols="50" name="message" class="form-control" placeholder="Vložte kommentár..."></textarea>
+                <textarea rows="4" cols="50" name="message" class="form-control" placeholder="Vložte komentár..."></textarea>
             </div>
 
             <input type="submit" class="btn btn-dark" value="Odoslať">
+            <a class="btn btn-primary" href="/applications/{{ aplication_id }}">Späť</a>
         </form>
     </div>
 </div>
